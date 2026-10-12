@@ -43,6 +43,13 @@ TEST_PATH_DICT = {
     ("ATSP", "uniform", 500): "../data/test/ATSP/atsp500_uniform_lkh_1000_1.57345.txt",
 }
 
+NUM_INSTANCES_DICT = {
+    ('ATSP', 'uniform', 50): 2500,
+    ('ATSP', 'uniform', 100): 2500,
+    ('ATSP', 'uniform', 200): 100,
+    ('ATSP', 'uniform', 500): 100,
+}
+
 env_params = {
     "test_type": TEST_DATA,
     "init_solver": "nn",
@@ -75,7 +82,7 @@ tester_params = {
     'augmentation_enable': True,
     'aug_factor': NUM_AUG,
     'use_2opt': USE_TWO_OPT,
-    'num_instances': 1,
+    'num_instances': NUM_INSTANCES_DICT[TEST_DATA],
     'rectify_ratio': 0.1,
     'rectify_lens': 1,
     'rectify_iters': 1,
@@ -103,6 +110,7 @@ def main():
 
 def _print_config():
     print("[Test Config] Dataset:", TEST_DATA)
+    print("[Test Config] Instances:", tester_params['num_instances'])
     print("[Test Config] N_Aug:", NUM_AUG)
     print("[Test Config] 2-OPT:", USE_TWO_OPT)
     print("[Test Config] Weight:", WEIGHT_DICT[TEST_DATA])

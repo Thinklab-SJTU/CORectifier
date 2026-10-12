@@ -41,6 +41,12 @@ TEST_PATH_DICT = {
     ("TSP", "uniform", 500): "../data/test/TSP/tsp500_concorde_16.54581.txt",
     }
 
+NUM_INSTANCES_DICT = {
+    ('TSP', 'uniform', 50): 1280,
+    ('TSP', 'uniform', 100): 1280,
+    ('TSP', 'uniform', 500): 128,
+}
+
 env_params = {
     "test_type": TEST_DATA,
     "node_cnt": NODES_NUM,
@@ -69,7 +75,7 @@ tester_params = {
     'test_file': TEST_PATH_DICT[TEST_DATA],
     'aug_factor': NUM_AUG,
     'use_2opt': USE_TWO_OPT,
-    'num_instances': 1,
+    'num_instances': NUM_INSTANCES_DICT[TEST_DATA],
 }
 
 def setup_seed(seed):
@@ -94,6 +100,7 @@ def main():
 
 def _print_config():
     print("[Test Config] Dataset:", TEST_DATA)
+    print("[Test Config] Instances:", tester_params['num_instances'])
     print("[Test Config] N_Aug:", NUM_AUG)
     print("[Test Config] 2-OPT:", USE_TWO_OPT)
     print("[Test Config] Weight:", WEIGHT_DICT[TEST_DATA])

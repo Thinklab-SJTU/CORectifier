@@ -29,6 +29,12 @@ VAL_PATH_DICT = {
     ("PCTSP", 100): "../data/test/PCTSP/pctsp100_val.txt",
 }
 
+NUM_INSTANCES_DICT = {
+    ('PCTSP', 20): 10000,
+    ('PCTSP', 50): 10000,
+    ('PCTSP', 100): 10000,
+}
+
 
 VAL_COST_DICT = {
     ("PCTSP", 20): "../data/test/PCTSP/pctsp20_cost.txt",
@@ -55,7 +61,7 @@ opts.problem = TRAIN_TYPE[0].lower()
 opts.graph_size = TRAIN_TYPE[1]
 opts.batch_size = 1
 opts.epoch_size = 1
-opts.val_size = 2
+opts.val_size = NUM_INSTANCES_DICT[TRAIN_TYPE]
 opts.val_dataset = VAL_PATH_DICT[TRAIN_TYPE]
 opts.train_folder = TRAIN_FOLDER_DICT[TRAIN_TYPE]
 opts.val_cost_path = VAL_COST_DICT[TRAIN_TYPE]

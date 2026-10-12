@@ -60,7 +60,7 @@ python KP/test_kp.py
 python PCTSP/test/test_pctsp.py
 ```
 
-Defaults are the smallest supported checkpoint, one instance, augmentation **16**, CUDA device **0**, TSP/ATSP **2-opt**, and CVRP **classic local search**. Increase `num_instances` (or PCTSP `opts.val_size`) to reproduce the paper table counts: TSP-50/100 **1,280**, TSP-500 **128**; ATSP-50/100 **2,500**, ATSP-200/500 **100**; CVRP-50/100 **10,000**, CVRP-200/500 **100**; KP **1,280** per scale; PCTSP **10,000** per scale. Set `NUM_AUG`/`aug_factor` to the paper row (`1`, `16` or `128`) as needed.
+Defaults use the smallest supported checkpoint and its **full test dataset**, augmentation **16**, CUDA device **0**, TSP/ATSP **2-opt**, and CVRP **classic local search**. `NUM_INSTANCES_DICT` selects `num_instances` (PCTSP `opts.val_size`) for the chosen scale: TSP-50/100 **1,280**, TSP-500 **128**; ATSP-50/100 **2,500**, ATSP-200/500 **100**; CVRP-50/100 **10,000**, CVRP-200/500 **100**; KP **1,280** per scale; PCTSP **10,000** per scale. Change `TEST_DATA` (PCTSP `NODES_NUM`) to select a scale and set `NUM_AUG`/`aug_factor` to the paper row (e.g., `1`, `16` or `128`) as needed.
 
 For real-world generalization:
 

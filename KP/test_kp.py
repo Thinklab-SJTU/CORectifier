@@ -42,6 +42,13 @@ TEST_PATH_DICT = {
     ("KP", "uniform", 500): "../data/test/KP/kp500_uniform_c25_test_91.12778.txt",
 }
 
+NUM_INSTANCES_DICT = {
+    ('KP', 'uniform', 50): 1280,
+    ('KP', 'uniform', 100): 1280,
+    ('KP', 'uniform', 200): 1280,
+    ('KP', 'uniform', 500): 1280,
+}
+
 env_params = {
     "test_type": TEST_DATA,
     "item_cnt": NODES_NUM,
@@ -65,7 +72,7 @@ tester_params = {
     'model_load': WEIGHT_DICT[TEST_DATA],
     'test_file': TEST_PATH_DICT[TEST_DATA],
     'aug_factor': NUM_AUG,
-    'num_instances': 1,
+    'num_instances': NUM_INSTANCES_DICT[TEST_DATA],
 }
 
 def setup_seed(seed):
@@ -90,6 +97,7 @@ def main():
 
 def _print_config():
     print("[Test Config] Dataset:", TEST_DATA)
+    print("[Test Config] Instances:", tester_params['num_instances'])
     print("[Test Config] N_Aug:", NUM_AUG)
     print("[Test Config] Weight:", WEIGHT_DICT[TEST_DATA])
 

@@ -43,6 +43,13 @@ TEST_PATH_DICT = {
     ("CVRP", "uniform", 500): "../data/test/CVRP/cvrp500_hgs-300s_37.154.txt",
 }
 
+NUM_INSTANCES_DICT = {
+    ('CVRP', 'uniform', 50): 10000,
+    ('CVRP', 'uniform', 100): 10000,
+    ('CVRP', 'uniform', 200): 100,
+    ('CVRP', 'uniform', 500): 100,
+}
+
 env_params = {
     "test_type": TEST_DATA,
     "node_cnt": NODES_NUM,
@@ -67,7 +74,7 @@ tester_params = {
     'model_load': WEIGHT_DICT[TEST_DATA],
     'test_file': TEST_PATH_DICT[TEST_DATA],
     'aug_factor': NUM_AUG,
-    'num_instances': 1,
+    'num_instances': NUM_INSTANCES_DICT[TEST_DATA],
 }
 
 def setup_seed(seed):
@@ -95,6 +102,7 @@ def main():
 
 def _print_config():
     print("[Test Config] Dataset:", TEST_DATA)
+    print("[Test Config] Instances:", tester_params['num_instances'])
     print("[Test Config] N_Aug:", NUM_AUG)
     print("[Test Config] Local Search:", USE_LS)
     print("[Test Config] Weight:", WEIGHT_DICT[TEST_DATA])
