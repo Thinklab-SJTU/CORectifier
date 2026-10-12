@@ -46,9 +46,49 @@ The task layout follows the original research code. Every resource path in an en
 
 ## 📦 Data
 
-Datasets are intentionally excluded from Git. Keep `data/train/.gitkeep` and `data/test/.gitkeep`, then place files using the paths declared by the selected task script. The public ML4CO sources are [test archive](https://drive.google.com/file/d/1tLQBUBAMJLIcW3KtS5gSXzuuKmdG9VOD/view?usp=share_link) and [training dataset](https://huggingface.co/datasets/ML4CO/ML4CO-Bench-101-SL/tree/main/train_dataset). The repository includes one tiny labeled training example per supported scale for a smoke test; replace it with full shards for training. PCTSP also needs its matching `*_val.txt` and `*_cost.txt` files.
+| Dataset | Download |
+| --- | --- |
+| TSP / ATSP / CVRP training data | [Hugging Face · ML4CO-Bench-101-SL](https://huggingface.co/datasets/ML4CO/ML4CO-Bench-101-SL/tree/main/train_dataset) |
+| KP / PCTSP training data | Google Drive — **link to be added** (`train_data_pctsp_kp.tar.gz`) |
+| All test data, including TSPLIB / CVRPLIB | [Google Drive](https://drive.google.com/file/d/1PhGWH1VN5qDzxQt8_YG4hQhFDJZuokOd/view?usp=sharing) (`test.tar.gz`) |
+
+Place training shards under `data/train/<TASK>/<scale_folder>/` and test files under `data/test/<TASK>/`. Task names are uppercase; keep the exact scale-folder and file names declared in `TRAIN_FOLDER_DICT`, `TEST_PATH_DICT` and `VAL_PATH_DICT`. For example:
+
+```text
+data/
+├── train/
+│   ├── TSP/TSP50_Uniform_Concorde/<shard>.txt
+│   ├── ATSP/ATSP50_Uniform_LKH-500/<shard>.txt
+│   ├── CVRP/CVRP50_Uniform_C40_HGS-1s/<shard>.txt
+│   ├── KP/KP50_Uniform_1.28m/kp50_uniform_c12.5_train_1.28m_1.txt
+│   └── PCTSP/pctsp20/pctsp20_train.txt
+└── test/
+    ├── TSP/  ATSP/  CVRP/  KP/     matching test .txt files
+    ├── PCTSP/                       matching *_val.txt and *_cost.txt pairs
+    ├── TSPLIB/                      library instance files
+    └── CVRPLIB/                     library instance files
+```
+
+The KP/PCTSP archive contains the complete training data used by the original code, with paths beginning at `data/train/`; the test archive begins at `data/test/`. Save the downloaded data archives under `data/`, then extract them from the repository root:
+
+```bash
+tar -xzf data/train_data_pctsp_kp.tar.gz
+tar -xzf data/test.tar.gz
+```
+
+Datasets and archives are excluded from Git; keep `data/train/.gitkeep` and `data/test/.gitkeep`. The local toy shards contain only one labeled example per scale for smoke tests. Replace them with the full downloaded shards before training, removing the toy files from those scale folders. PCTSP evaluation requires both the matching `*_val.txt` and `*_cost.txt` files.
 
 Synthetic main-task scales match the released checkpoints: TSP **50/100/500**, ATSP **50/100/200/500**, CVRP **50/100/200/500**, KP **50/100/200/500**, and PCTSP **20/50/100**. Larger instances are available only through the TSPLIB/CVRPLIB extension files.
+
+## 🧠 Pretrained weights
+
+Download `weights.tar.gz` from [Google Drive](https://drive.google.com/file/d/1-EMTUzucT1Ii-Yms002-TQWivNwsfD0P/view?usp=sharing) and save it at the repository root. The archive already contains the `weights/` directory:
+
+```bash
+tar -xzf weights.tar.gz
+```
+
+Keep the checkpoint filenames declared in each task's `WEIGHT_DICT` (`LOAD_PATH_DICT` for PCTSP). Checkpoints and the archive are excluded from Git; keep `weights/.gitkeep`.
 
 ## 🚀 Evaluate
 
