@@ -83,27 +83,37 @@ python KP/train_kp.py
 python PCTSP/train_pctsp.py
 ```
 
-Set `NODES_NUM` in the entry script (`ITEMS_NUM` for KP) to select a scale. Epochs, batch size, samples per epoch and initial learning rate are selected automatically from **Appendix E, Tables 14–15**:
+**For best training results, train progressively from smaller to larger instances. Each larger scale should continue from the final checkpoint of the previous scale.** Use `50 → 100 → 500` for TSP, `20 → 50 → 100` for PCTSP, and `50 → 100 → 200 → 500` for ATSP/CVRP/KP. The smallest scale starts without a predecessor checkpoint. At each scale, we recommend a short labeled IL warm-up before continuing with Rectified RL (RRL).
 
-| Task | Size | RRL epochs | Batch size | Samples / epoch | Initial LR |
-| --- | --- | --- | --- | --- | --- |
-| TSP | 50 | 2,000 | 200 | 10,000 | 2e-4 |
-| TSP | 100 | 10,000 | 64 | 10,000 | 1e-4 |
-| TSP | 500 | 1,000 | 2 | 10,000 | 1e-4 |
-| ATSP | 50 | 8,000 | 200 | 10,000 | 4e-4 |
-| ATSP | 100 | 3,000 | 64 | 10,000 | 2e-4 |
-| ATSP | 200 | 3,000 | 8 | 10,000 | 2e-4 |
-| ATSP | 500 | 2,000 | 2 | 10,000 | 5e-5 |
-| CVRP | 50 | 12,000 | 200 | 10,000 | 2e-4 |
-| CVRP | 100 | 12,000 | 128 | 10,000 | 2e-4 |
-| CVRP | 200 | 8,000 | 16 | 10,000 | 1e-4 |
-| CVRP | 500 | 2,000 | 8 | 10,000 | 1e-4 |
-| KP | 50 / 100 | 5,000 | 200 | 10,000 | 1e-4 |
-| KP | 200 | 1,000 | 64 | 10,000 | 5e-5 |
-| KP | 500 | 1,000 | 16 | 10,000 | 5e-5 |
-| PCTSP | 20 / 50 / 100 | 10,000 | 64 | 6,400 | 1e-4 |
+Set `NODES_NUM` in the entry script (`ITEMS_NUM` for KP) to select a scale. RRL epochs, batch size, samples per epoch and initial learning rate are selected automatically from **Appendix E, Tables 14–15**. The separate pre-training column gives the warm-up budget to set manually when running that stage:
 
-All tasks use Adam with `weight_decay=1e-6`. Defaults use CUDA device 0, validation augmentation 16, and no checkpoint warm start. **Rectifier is enabled** (`USE_LABEL=True` or `opts.use_label=True`) and imitation loss is disabled (`IL_loss=False`, `USE_IL=False` or `opts.il_loss=False`). The table gives the RRL training budget; the appendix's pre-training budgets describe a separate stage. TSP/ATSP use 2-opt during validation; CVRP uses local search. Training POMO size is `min(size, 200)`.
+| Task | Size | Pre-training epochs | RRL epochs | RRL batch size | Samples / epoch | Initial LR |
+| --- | --- | --- | --- | --- | --- | --- |
+| TSP | 50 | 200 | 2,000 | 200 | 10,000 | 2e-4 |
+| TSP | 100 | 100 | 10,000 | 64 | 10,000 | 1e-4 |
+| TSP | 500 | 100 | 1,000 | 2 | 10,000 | 1e-4 |
+| ATSP | 50 | 200 | 8,000 | 200 | 10,000 | 4e-4 |
+| ATSP | 100 | 100 | 3,000 | 64 | 10,000 | 2e-4 |
+| ATSP | 200 | 100 | 3,000 | 8 | 10,000 | 2e-4 |
+| ATSP | 500 | 100 | 2,000 | 2 | 10,000 | 5e-5 |
+| CVRP | 50 | 1,000 | 12,000 | 200 | 10,000 | 2e-4 |
+| CVRP | 100 | 1,000 | 12,000 | 128 | 10,000 | 2e-4 |
+| CVRP | 200 | 500 | 8,000 | 16 | 10,000 | 1e-4 |
+| CVRP | 500 | 100 | 2,000 | 8 | 10,000 | 1e-4 |
+| KP | 50 / 100 | 1,000 | 5,000 | 200 | 10,000 | 1e-4 |
+| KP | 200 | 500 | 1,000 | 64 | 10,000 | 5e-5 |
+| KP | 500 | 100 | 1,000 | 16 | 10,000 | 5e-5 |
+| PCTSP | 20 / 50 / 100 | 200 | 10,000 | 64 | 6,400 | 1e-4 |
+
+Table 14 calls the TSP/ATSP/PCTSP warm-up stage **IL**; Table 15 lists CVRP/KP budgets as **pretrain**. To follow the recommended recipe:
+
+1. **Load the previous scale's final checkpoint.** For TSP/ATSP/CVRP/KP, set `trainer_params['model_load']['enable']=True` and point `path` to the preceding run's final `checkpoint-<epoch>.pt`; set `epoch=0` to run the new scale's full epoch budget. For PCTSP, set `opts.load_path` to the preceding run's final `epoch-<epoch>.pt`, with `opts.resume=None` and `opts.epoch_start=0`.
+2. **Warm up with labeled IL.** Keep `USE_LABEL=True` / `opts.use_label=True`. Enable `trainer_params['IL_loss']=True` for TSP/ATSP, `USE_IL=True` for CVRP/KP, or `opts.il_loss=True` for PCTSP. Set `MAX_EPOCHS` / `opts.n_epochs` to the pre-training budget above; adjust the IL batch size to available memory.
+3. **Continue with RRL.** Load the warm-up's final checkpoint, disable the IL flag, and restore the selected scale's RRL budget and Rectifier settings. After RRL finishes, use its final checkpoint to initialize the next scale.
+
+ATSP's `only_weight=True` and PCTSP's `load_path` initialize model weights for a new stage. TSP/CVRP/KP also restore optimizer state, so check the loaded learning rate and reset it to the selected scale's initial LR when starting a new stage.
+
+All tasks use Adam with `weight_decay=1e-6`. Defaults use CUDA device 0 and validation augmentation 16. **Rectifier is enabled** (`USE_LABEL=True` or `opts.use_label=True`); IL and checkpoint loading are opt-in through the settings above. TSP/ATSP use 2-opt during validation; CVRP uses local search. Training POMO size is `min(size, 200)`.
 
 Download the full labeled training shards before running these budgets. For a toy smoke test, manually set `MAX_EPOCHS`, `BATCH_SIZE` and `SAMPLES_PER_EPOCH` to 1 (PCTSP: `opts.n_epochs`, `opts.batch_size` and `opts.epoch_size`). PCTSP's `options.py` also selects the same settings and matching data paths from `--graph_size`, while preserving explicit CLI overrides.
 
