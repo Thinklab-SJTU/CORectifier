@@ -1,0 +1,24 @@
+# Keep dataset directories; distribute data separately.
+/data/*
+!/data/train/
+!/data/test/
+/data/train/*
+!/data/train/.gitkeep
+/data/test/*
+!/data/test/.gitkeep
+
+# Keep the weights directory; distribute checkpoints separately.
+/weights/*
+!/weights/.gitkeep
+
+# Training outputs, Python caches and native builds.
+**/result/
+/PCTSP/outputs/
+/PCTSP/logs/
+/ATSP/utils/libtsp.so
+/CVRP/utils/c_local_search/*.so
+core
+core.*
+__pycache__/
+*.py[cod]
+*.log
