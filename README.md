@@ -15,7 +15,7 @@ CORectifier gives policy-gradient solvers useful action-level supervision withou
 
 - **State-consistent guidance:** every replacement is checked against the current feasible state, so sequential constraints remain intact.
 - **Three levels of control:** batch, trajectory and contiguous segment gates regulate when and how much expert information enters training.
-- **One training recipe across CO:** the release covers TSP, ATSP, CVRP, KP and PCTSP, with TSPLIB and CVRPLIB evaluation entries.
+- **One training recipe across CO:** the release covers Traveling Salesman Problem (TSP), Asymmetric TSP (ATSP), Prize-Collecting TSP (PCTSP), Capacitated Vehicle Routing Problem (CVRP), Knapsack Problem (KP), with TSPLIB and CVRPLIB evaluation entries. More applicable tasks: Job-Shop Scheduling Problem (JSSP), Single Machine Total Weighted Tardiness Problem (SMTWTP), etc. 
 - **Better scaling for RL:** the paper reports strong gains through 500-node routing instances while keeping greedy inference lightweight.
 
 ## 🧰 Install
