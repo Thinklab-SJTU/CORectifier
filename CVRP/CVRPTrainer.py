@@ -79,7 +79,7 @@ class CVRPTrainer:
                 self.act_prob = 1.
             else:
                 self.label_scheduler = CosineAnnealingParamScheduler(self.env.label_prob, eta_min=0, T_max=10, name="label_prob")
-                self.inst_scheduler = CosineAnnealingParamScheduler(self.instance_prob, eta_min=0.25, T_max=20, name="instance_prob")
+                self.inst_scheduler = CosineAnnealingParamScheduler(self.instance_prob, eta_min=0, T_max=20, name="instance_prob")
                 self.act_scheduler = CosineAnnealingParamScheduler(self.act_prob, eta_min=0, T_max=40, name="act_prob")
         else:
             assert not self.il_loss, "IL can be only enabled when `use_label` is True."

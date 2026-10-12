@@ -6,9 +6,17 @@ USE_LABEL = True  # whether or not enable retifications
 CUDA_DEVICE_NUM = 0
 
 NODES_NUM = 50
-MAX_EPOCHS = 1
-BATCH_SIZE = 1
-SAMPLES_PER_EPOCH = 1
+
+# Appendix E, Table 14: Rectified RL training settings.
+TRAIN_CONFIG_DICT = {
+    50: {'epochs': 2000, 'batch_size': 200, 'samples_per_epoch': 10000, 'lr': 2e-4},
+    100: {'epochs': 10000, 'batch_size': 64, 'samples_per_epoch': 10000, 'lr': 1e-4},
+    500: {'epochs': 1000, 'batch_size': 2, 'samples_per_epoch': 10000, 'lr': 1e-4},
+}
+TRAIN_CONFIG = TRAIN_CONFIG_DICT[NODES_NUM]
+MAX_EPOCHS = TRAIN_CONFIG['epochs']
+BATCH_SIZE = TRAIN_CONFIG['batch_size']
+SAMPLES_PER_EPOCH = TRAIN_CONFIG['samples_per_epoch']
 
 TRAIN_TYPE = ("TSP", "uniform", NODES_NUM)
 
@@ -30,7 +38,8 @@ VAL_PATH_DICT = {
 import os
 import sys
 
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
+__file__ = os.path.abspath(__file__)
+os.chdir(os.path.dirname(__file__))
 
 
 ##########################################################################################
@@ -87,7 +96,7 @@ model_params = {
 optimizer_params = {
     "type": "multi-step", # "cosine" if USE_LABEL else
     "optimizer": {
-        "lr": 1e-4 if NODES_NUM > 50 else 2e-4,
+        "lr": TRAIN_CONFIG['lr'],
         "weight_decay": 1e-6
     },
     "scheduler": {

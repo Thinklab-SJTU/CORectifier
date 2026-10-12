@@ -10,6 +10,7 @@
 # Keep the weights directory; distribute checkpoints separately.
 /weights/*
 !/weights/.gitkeep
+/weights.tar.gz
 
 # Training outputs, Python caches and native builds.
 **/result/

@@ -7,11 +7,22 @@ USE_IL = False
 CUDA_DEVICE_NUM = 0
 
 ITEMS_NUM = 50
-MAX_EPOCHS = 1
-BATCH_SIZE = 1
-SAMPLES_PER_EPOCH = 1
+
+# Appendix E, Table 15: Rectified RL training settings.
+TRAIN_CONFIG_DICT = {
+    50: {'epochs': 5000, 'batch_size': 200, 'samples_per_epoch': 10000, 'lr': 1e-4},
+    100: {'epochs': 5000, 'batch_size': 200, 'samples_per_epoch': 10000, 'lr': 1e-4},
+    200: {'epochs': 1000, 'batch_size': 64, 'samples_per_epoch': 10000, 'lr': 5e-5},
+    500: {'epochs': 1000, 'batch_size': 16, 'samples_per_epoch': 10000, 'lr': 5e-5},
+}
+TRAIN_CONFIG = TRAIN_CONFIG_DICT[ITEMS_NUM]
+MAX_EPOCHS = TRAIN_CONFIG['epochs']
+BATCH_SIZE = TRAIN_CONFIG['batch_size']
+SAMPLES_PER_EPOCH = TRAIN_CONFIG['samples_per_epoch']
 
 MILESTONE_DICT = {
+    5000: [4501, 4901],
+    1000: [801, 901],
     500: [301, 401]
 }
 
@@ -37,7 +48,8 @@ VAL_PATH_DICT = {
 import os
 import sys
 
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
+__file__ = os.path.abspath(__file__)
+os.chdir(os.path.dirname(__file__))
 
 
 ##########################################################################################
@@ -82,7 +94,7 @@ model_params = {
 optimizer_params = {
     "type": "multi-step", # "cosine" if USE_LABEL else
     "optimizer": {
-        "lr": 1e-4 if ITEMS_NUM <= 100 else 5e-5,
+        "lr": TRAIN_CONFIG['lr'],
         "weight_decay": 1e-6
     },
     "scheduler": {

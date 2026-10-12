@@ -3,6 +3,13 @@ import time
 import argparse
 import torch
 
+# Appendix E, Table 14: Rectified RL training settings.
+TRAIN_CONFIG_DICT = {
+    20: {'epochs': 10000, 'batch_size': 64, 'samples_per_epoch': 6400, 'lr': 1e-4},
+    50: {'epochs': 10000, 'batch_size': 64, 'samples_per_epoch': 6400, 'lr': 1e-4},
+    100: {'epochs': 10000, 'batch_size': 64, 'samples_per_epoch': 6400, 'lr': 1e-4},
+}
+
 
 def get_options(args=None):
     parser = argparse.ArgumentParser(
@@ -11,11 +18,11 @@ def get_options(args=None):
     # Data
     parser.add_argument('--problem', default='pctsp', help="The problem to solve, default 'pctsp'")
     parser.add_argument('--graph_size', type=int, default=20, help="The size of the problem graph")
-    parser.add_argument('--batch_size', type=int, default=1, help='Number of instances per batch during training')
-    parser.add_argument('--epoch_size', type=int, default=1, help='Number of instances per epoch during training')
+    parser.add_argument('--batch_size', type=int, default=None, help='Training batch size; defaults to Appendix E for graph_size')
+    parser.add_argument('--epoch_size', type=int, default=None, help='Instances per epoch; defaults to Appendix E for graph_size')
     parser.add_argument('--val_size', type=int, default=2,
                         help='Number of instances used for reporting validation performance')
-    parser.add_argument('--val_dataset', type=str, default='../data/test/PCTSP/pctsp20_val.txt', help='Dataset file to use for validation')
+    parser.add_argument('--val_dataset', type=str, default=None, help='Validation dataset; defaults to the selected graph_size')
 
     # Model
     parser.add_argument('--model', default='attention', help="Model, 'attention' (default) or 'pointer'")
@@ -29,11 +36,12 @@ def get_options(args=None):
     parser.add_argument('--normalization', default='batch', help="Normalization type, 'batch' (default) or 'instance'")
 
     # Training
-    parser.add_argument('--lr_model', type=float, default=1e-4, help="Set the learning rate for the actor network")
+    parser.add_argument('--lr_model', type=float, default=None, help="Actor learning rate; defaults to Appendix E for graph_size")
+    parser.add_argument('--weight_decay', type=float, default=1e-6, help='Adam weight decay (Appendix E)')
     parser.add_argument('--lr_critic', type=float, default=1e-4, help="Set the learning rate for the critic network")
     parser.add_argument('--lr_decay', type=float, default=1.0, help='Learning rate decay per epoch')
     parser.add_argument('--eval_only', action='store_true', help='Set this value to only evaluate model')
-    parser.add_argument('--n_epochs', type=int, default=1, help='The number of epochs to train')
+    parser.add_argument('--n_epochs', type=int, default=None, help='Training epochs; defaults to Appendix E for graph_size')
     parser.add_argument('--seed', type=int, default=1234, help='Random seed to use')
     parser.add_argument('--max_grad_norm', type=float, default=1.0,
                         help='Maximum L2 norm for gradient clipping, default 1.0 (0 to disable clipping)')
@@ -71,8 +79,8 @@ def get_options(args=None):
     parser.add_argument('--no_tensorboard', action='store_true', help='Disable logging TensorBoard files')
     parser.add_argument('--no_progress_bar', action='store_true', help='Disable progress bar')
 
-    parser.add_argument('--train_folder', default='../data/train/PCTSP/pctsp20')
-    parser.add_argument('--val_cost_path', default='../data/test/PCTSP/pctsp20_cost.txt')
+    parser.add_argument('--train_folder', default=None)
+    parser.add_argument('--val_cost_path', default=None)
     parser.add_argument('--no_label', dest='use_label', action='store_false')
     parser.add_argument('--il_loss', action='store_true')
     parser.add_argument('--label_prob', type=float, default=0.1)
@@ -85,6 +93,20 @@ def get_options(args=None):
     parser.add_argument('--multi_gpu', dest='single_gpu', action='store_false')
     parser.set_defaults(use_label=True, single_gpu=True, no_tensorboard=True)
     opts = parser.parse_args(args)
+
+    if opts.graph_size not in TRAIN_CONFIG_DICT:
+        parser.error('PCTSP graph_size must be one of 20, 50, 100')
+    train_config = TRAIN_CONFIG_DICT[opts.graph_size]
+    for option, setting in [('n_epochs', 'epochs'), ('batch_size', 'batch_size'),
+                            ('epoch_size', 'samples_per_epoch'), ('lr_model', 'lr')]:
+        if getattr(opts, option) is None:
+            setattr(opts, option, train_config[setting])
+    if opts.val_dataset is None:
+        opts.val_dataset = f'../data/test/PCTSP/pctsp{opts.graph_size}_val.txt'
+    if opts.train_folder is None:
+        opts.train_folder = f'../data/train/PCTSP/pctsp{opts.graph_size}'
+    if opts.val_cost_path is None:
+        opts.val_cost_path = f'../data/test/PCTSP/pctsp{opts.graph_size}_cost.txt'
 
     opts.use_cuda = torch.cuda.is_available() and not opts.no_cuda
     opts.run_name = "{}_{}".format(opts.run_name, time.strftime("%Y%m%dT%H%M%S"))

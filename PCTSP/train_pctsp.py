@@ -5,11 +5,13 @@ import time
 import torch
 from run import run
 from argparse import Namespace
+from options import TRAIN_CONFIG_DICT
 
 opts = Namespace()
 
 NODES_NUM = 20
 TRAIN_TYPE = ("PCTSP", NODES_NUM)
+TRAIN_CONFIG = TRAIN_CONFIG_DICT[NODES_NUM]
 
 TRAIN_FOLDER_DICT = {
     ("PCTSP", 20): "../data/train/PCTSP/pctsp20",
@@ -40,8 +42,8 @@ opts.rect_range = [0.1, 0.2]  # [0.8, 1.0]
 # Env
 opts.problem = TRAIN_TYPE[0].lower()
 opts.graph_size = TRAIN_TYPE[1]
-opts.batch_size = 1
-opts.epoch_size = 1
+opts.batch_size = TRAIN_CONFIG['batch_size']
+opts.epoch_size = TRAIN_CONFIG['samples_per_epoch']
 opts.val_size = 2
 opts.val_dataset = VAL_PATH_DICT[TRAIN_TYPE]
 opts.train_folder = TRAIN_FOLDER_DICT[TRAIN_TYPE]
@@ -56,18 +58,19 @@ opts.tanh_clipping = 10.
 opts.normalization = 'batch'
 
 # Training
-opts.lr_model = 1e-4
+opts.lr_model = TRAIN_CONFIG['lr']
+opts.weight_decay = 1e-6
 opts.lr_critic = 1e-4
 opts.lr_decay = 1.0
 opts.eval_only = False
-opts.n_epochs = 1
+opts.n_epochs = TRAIN_CONFIG['epochs']
 opts.seed = 1234
 opts.max_grad_norm = 1.0
 opts.no_cuda = False
 opts.exp_beta = 0.8
 opts.baseline = 'rollout'
 opts.bl_alpha = 0.05
-opts.bl_warmup_epochs = 0  # A one-instance exponential warmup batch has zero advantage.
+opts.bl_warmup_epochs = 0
 opts.eval_batch_size = 16
 opts.checkpoint_encoder = False
 opts.shrink_size = None

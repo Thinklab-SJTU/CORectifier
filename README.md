@@ -71,6 +71,8 @@ python CVRP/test_cvrplib.py
 
 The TSPLIB/CVRPLIB scripts enumerate the copied library files and select a compatible released model through their explicit `WEIGHT_DICT`.
 
+The CVRPLIB entry maps the 100-customer model to `cvrp100_cvrplib.pt` (epoch 7192), matching the original evaluation script. It comes from the same synthetic CVRP100 training run as `cvrp100.pt` (epoch 10619), with Rectifier enabled and imitation loss disabled. The separate file preserves the original checkpoint choice for CVRPLIB evaluation; it is not a model trained on CVRPLIB.
+
 ## 🏋️ Train
 
 ```bash
@@ -81,7 +83,29 @@ python KP/train_kp.py
 python PCTSP/train_pctsp.py
 ```
 
-Training defaults are deliberately minimal: one epoch, one sample, batch size 1, CUDA device 0, augmentation 16, and no checkpoint warm start. **Rectifier is enabled** (`USE_LABEL=True` or `opts.use_label=True`) and imitation loss is disabled (`IL_loss=False`, `USE_IL=False` or `opts.il_loss=False`). TSP/ATSP use 2-opt during validation; CVRP uses local search. Replace the toy shard and raise the limits in the entry script for a full run.
+Set `NODES_NUM` in the entry script (`ITEMS_NUM` for KP) to select a scale. Epochs, batch size, samples per epoch and initial learning rate are selected automatically from **Appendix E, Tables 14–15**:
+
+| Task | Size | RRL epochs | Batch size | Samples / epoch | Initial LR |
+| --- | --- | --- | --- | --- | --- |
+| TSP | 50 | 2,000 | 200 | 10,000 | 2e-4 |
+| TSP | 100 | 10,000 | 64 | 10,000 | 1e-4 |
+| TSP | 500 | 1,000 | 2 | 10,000 | 1e-4 |
+| ATSP | 50 | 8,000 | 200 | 10,000 | 4e-4 |
+| ATSP | 100 | 3,000 | 64 | 10,000 | 2e-4 |
+| ATSP | 200 | 3,000 | 8 | 10,000 | 2e-4 |
+| ATSP | 500 | 2,000 | 2 | 10,000 | 5e-5 |
+| CVRP | 50 | 12,000 | 200 | 10,000 | 2e-4 |
+| CVRP | 100 | 12,000 | 128 | 10,000 | 2e-4 |
+| CVRP | 200 | 8,000 | 16 | 10,000 | 1e-4 |
+| CVRP | 500 | 2,000 | 8 | 10,000 | 1e-4 |
+| KP | 50 / 100 | 5,000 | 200 | 10,000 | 1e-4 |
+| KP | 200 | 1,000 | 64 | 10,000 | 5e-5 |
+| KP | 500 | 1,000 | 16 | 10,000 | 5e-5 |
+| PCTSP | 20 / 50 / 100 | 10,000 | 64 | 6,400 | 1e-4 |
+
+All tasks use Adam with `weight_decay=1e-6`. Defaults use CUDA device 0, validation augmentation 16, and no checkpoint warm start. **Rectifier is enabled** (`USE_LABEL=True` or `opts.use_label=True`) and imitation loss is disabled (`IL_loss=False`, `USE_IL=False` or `opts.il_loss=False`). The table gives the RRL training budget; the appendix's pre-training budgets describe a separate stage. TSP/ATSP use 2-opt during validation; CVRP uses local search. Training POMO size is `min(size, 200)`.
+
+Download the full labeled training shards before running these budgets. For a toy smoke test, manually set `MAX_EPOCHS`, `BATCH_SIZE` and `SAMPLES_PER_EPOCH` to 1 (PCTSP: `opts.n_epochs`, `opts.batch_size` and `opts.epoch_size`). PCTSP's `options.py` also selects the same settings and matching data paths from `--graph_size`, while preserving explicit CLI overrides.
 
 ## 🎛️ Rectifier knobs
 
@@ -94,8 +118,10 @@ Training defaults are deliberately minimal: one epoch, one sample, batch size 1,
 | `act_prob` | CVRP route gate; TSP/ATSP/PCTSP keep it at `1.0` and use their segment masks. |
 | `IL_loss` / `opts.il_loss` | Optional imitation objective; disabled by default. |
 
+Appendix defaults are `label_prob=instance_prob=0.1` for TSP/PCTSP/CVRP/KP and `0.5` for ATSP; `rect_range=[0.1, 0.2]` for TSP/PCTSP and `[0.8, 1.0]` for ATSP; CVRP uses `act_prob=0.1`. Independent cosine schedules use `T_max=10/20/40/40/40` for batch probability, instance probability, segment lower/upper bounds and CVRP route probability, where applicable.
+
 The reference tour is used only while training. The executed action is rescored by the policy, preserving the original RL objective and feasibility checks.
 
 ## 📚 Acknowledgements
 
-The implementations build on [POMO](https://github.com/yd-kwon/POMO), [MatNet](https://github.com/yd-kwon/MatNet), [AM](https://github.com/wouterkool/attention-learn-to-route), and [ML4CO-Kit](https://github.com/Thinklab-SJTU/ML4CO-Kit).
+The implementations build on [POMO](https://github.com/yd-kwon/POMO), [MatNet](https://github.com/yd-kwon/MatNet), [AM](https://github.com/wouterkool/attention-learn-to-route), [UniCO](https://github.com/Thinklab-SJTU/UniCO), and [ML4CO-Kit](https://github.com/Thinklab-SJTU/ML4CO-Kit).

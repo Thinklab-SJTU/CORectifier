@@ -114,7 +114,8 @@ def run(opts):
             [{'params': baseline.get_learnable_parameters(), 'lr': opts.lr_critic}]
             if len(baseline.get_learnable_parameters()) > 0
             else []
-        )
+        ),
+        weight_decay=getattr(opts, 'weight_decay', 1e-6),
     )
 
     lr_scheduler = optim.lr_scheduler.LambdaLR(optimizer, lambda epoch: opts.lr_decay ** epoch)
