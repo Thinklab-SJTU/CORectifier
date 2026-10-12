@@ -135,3 +135,15 @@ The reference tour is used only while training. The executed action is rescored 
 ## 📚 Acknowledgements
 
 The implementations build on [POMO](https://github.com/yd-kwon/POMO), [MatNet](https://github.com/yd-kwon/MatNet), [AM](https://github.com/wouterkool/attention-learn-to-route), [UniCO](https://github.com/Thinklab-SJTU/UniCO), and [ML4CO-Kit](https://github.com/Thinklab-SJTU/ML4CO-Kit).
+
+## ✍🏻 Citation
+```
+@inproceedings{
+CORectifier,
+title={CORectifier: Hierarchically Rectifying Policy Rollouts for Reinforcement Learning in Combinatorial Solvers},
+author={Wenzheng Pan and Nuoyan Chen and Jiaxi Liu and Jiale Ma and Junchi Yan},
+booktitle={The Fortieth Annual Conference on Neural Information Processing Systems},
+year={2026}
+}
+```
+Please use the BibTeX entry exported from OpenReview after the camera-ready version is publicly available as the authoritative citation.
