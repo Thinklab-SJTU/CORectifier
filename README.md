@@ -2,7 +2,9 @@
 
 This is the official implementation of our NeurIPS 2026 paper "[**Hierarchically Rectifying Policy Rollouts for Reinforcement Learning in Combinatorial Solvers**](https://openreview.net/forum?id=bpt10w03zk)".
 
-**Authors**: [**Wenzheng Pan**](https://wzever.github.io/) · [**Nuoyan Chen**](https://cny123222.github.io/about/) · [**Jiaxi Liu**](https://ecthelionliu.github.io) · [**Jiale Ma**](https://heatingma.github.io/) · [**Junchi Yan**](https://thinklab.sjtu.edu.cn) | [![NeurIPS 2026](https://img.shields.io/badge/NeurIPS-2026-b31b1b.svg)](paper_preview.pdf) [[paper preview](paper_preview.pdf)]
+**Authors**: [**Wenzheng Pan**](https://wzever.github.io/) · [**Nuoyan Chen**](https://cny123222.github.io/about/) · [**Jiaxi Liu**](https://ecthelionliu.github.io) · [**Jiale Ma**](https://heatingma.github.io/) · [**Junchi Yan**](https://thinklab.sjtu.edu.cn) | [![NeurIPS 2026](https://img.shields.io/badge/NeurIPS-2026-b31b1b.svg)](paper_preview.pdf) [[paper preview*](paper_preview.pdf)]
+
+*The current PDF is provided for early readers only; please refer to the officially published camera-ready version for the definitive paper.
 
 ---
 CORectifier gives policy-gradient solvers useful action-level supervision without breaking feasibility. During training, a hierarchical **batch → trajectory → segment** gate selectively replaces a policy action with the feasible successor from an expert tour, then continues the rollout from the executed state. The policy is optimized with the resulting rollout reward and likelihoods; at inference time, the model is used normally with no expert data or rectifier.
