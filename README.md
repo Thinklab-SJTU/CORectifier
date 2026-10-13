@@ -49,7 +49,7 @@ The task layout follows the original research code. Every resource path in an en
 | Dataset | Download |
 | --- | --- |
 | TSP / ATSP / CVRP training data | [Hugging Face · ML4CO-Bench-101-SL](https://huggingface.co/datasets/ML4CO/ML4CO-Bench-101-SL/tree/main/train_dataset) |
-| KP / PCTSP training data | Google Drive — **link to be added** (`corectifier_train_data_pctsp_kp.tar.gz`) |
+| KP / PCTSP training data | [Google Drive](https://drive.google.com/file/d/1KTGGG4nyqZ4zzHm1sAe10zyDrnPgtADz/view?usp=sharing) (`corectifier_train_data_pctsp_kp.tar.gz`) |
 | All test data, including TSPLIB / CVRPLIB | [Google Drive](https://drive.google.com/file/d/1PhGWH1VN5qDzxQt8_YG4hQhFDJZuokOd/view?usp=sharing) (`corectifier_test.tar.gz`) |
 
 Place training shards under `data/train/<TASK>/<scale_folder>/` and test files under `data/test/<TASK>/`. Task names are uppercase; keep the exact scale-folder and file names declared in `TRAIN_FOLDER_DICT`, `TEST_PATH_DICT` and `VAL_PATH_DICT`. For example:
