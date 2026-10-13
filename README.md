@@ -50,7 +50,7 @@ The task layout follows the original research code. Every resource path in an en
 | --- | --- |
 | TSP / ATSP / CVRP training data | [Hugging Face · ML4CO-Bench-101-SL](https://huggingface.co/datasets/ML4CO/ML4CO-Bench-101-SL/tree/main/train_dataset) |
 | KP / PCTSP training data | [Google Drive](https://drive.google.com/file/d/1KTGGG4nyqZ4zzHm1sAe10zyDrnPgtADz/view?usp=sharing) (`corectifier_train_data_pctsp_kp.tar.gz`) |
-| All test data, including TSPLIB / CVRPLIB | [Google Drive](https://drive.google.com/file/d/1PhGWH1VN5qDzxQt8_YG4hQhFDJZuokOd/view?usp=sharing) (`corectifier_test.tar.gz`) |
+| All test data, including TSPLIB / CVRPLIB | [Google Drive](https://drive.google.com/file/d/1PhGWH1VN5qDzxQt8_YG4hQhFDJZuokOd/view?usp=sharing) (`corectifier_test_data.tar.gz`) |
 
 Place training shards under `data/train/<TASK>/<scale_folder>/` and test files under `data/test/<TASK>/`. Task names are uppercase; keep the exact scale-folder and file names declared in `TRAIN_FOLDER_DICT`, `TEST_PATH_DICT` and `VAL_PATH_DICT`. For example:
 
@@ -72,8 +72,8 @@ data/
 The KP/PCTSP archive contains the complete training data used by the original code, with paths beginning at `data/train/`; the test archive begins at `data/test/`. Save the downloaded data archives under `data/`, then extract them from the repository root:
 
 ```bash
-tar -xzf data/train_data_pctsp_kp.tar.gz
-tar -xzf data/test.tar.gz
+tar -xzf data/corectifier_train_data_pctsp_kp.tar.gz
+tar -xzf data/corectifier_test_data.tar.gz
 ```
 
 Datasets and archives are excluded from Git; keep `data/train/.gitkeep` and `data/test/.gitkeep`. The local toy shards contain only one labeled example per scale for smoke tests. Replace them with the full downloaded shards before training, removing the toy files from those scale folders. PCTSP evaluation requires both the matching `*_val.txt` and `*_cost.txt` files.
@@ -82,10 +82,10 @@ Synthetic main-task scales match the released checkpoints: TSP **50/100/500**, A
 
 ## 🧠 Pretrained weights
 
-Download `weights.tar.gz` from [Google Drive](https://drive.google.com/file/d/1-EMTUzucT1Ii-Yms002-TQWivNwsfD0P/view?usp=sharing) and save it at the repository root. The archive already contains the `weights/` directory:
+Download `corectifier_weights.tar.gz` from [Google Drive](https://drive.google.com/file/d/1-EMTUzucT1Ii-Yms002-TQWivNwsfD0P/view?usp=sharing) and save it at the repository root. The archive already contains the `weights/` directory:
 
 ```bash
-tar -xzf weights.tar.gz
+tar -xzf corectifier_weights.tar.gz
 ```
 
 Keep the checkpoint filenames declared in each task's `WEIGHT_DICT` (`LOAD_PATH_DICT` for PCTSP). Checkpoints and the archive are excluded from Git; keep `weights/.gitkeep`.
