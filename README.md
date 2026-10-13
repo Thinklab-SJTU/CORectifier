@@ -174,7 +174,7 @@ The reference tour is used only while training. The executed action is rescored 
 
 ## 📚 Acknowledgements
 
-The implementations build on [POMO](https://github.com/yd-kwon/POMO), [MatNet](https://github.com/yd-kwon/MatNet), [AM](https://github.com/wouterkool/attention-learn-to-route), [UniCO](https://github.com/Thinklab-SJTU/UniCO), and [ML4CO-Kit](https://github.com/Thinklab-SJTU/ML4CO-Kit).
+The implementations partly build on [POMO](https://github.com/yd-kwon/POMO), [MatNet](https://github.com/yd-kwon/MatNet), [AM](https://github.com/wouterkool/attention-learn-to-route), [UniCO](https://github.com/Thinklab-SJTU/UniCO), [ML4CO-Bench-101](https://github.com/Thinklab-SJTU/ML4CO-Bench-101), and [ML4CO-Kit](https://github.com/Thinklab-SJTU/ML4CO-Kit).
 
 ## ✍🏻 Citation
 ```
