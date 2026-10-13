@@ -7,6 +7,9 @@ This is the official implementation of our NeurIPS 2026 paper "[**Hierarchically
 *The current PDF is provided for early readers only; please refer to the officially published camera-ready version for the definitive paper.
 
 ---
+> 🎉 **News: CORectifier joins our recent NCO series!** CORectifier is the newest member of our growing series of NCO methods, each exploring a distinct role in combinatorial solvers. Also check out **[COExpander](https://github.com/Thinklab-SJTU/COExpander)** (ICML 2025), which introduces adaptive solution expansion on top of generative heatmap predictors. We'll keep building this series, sharing strong methods with clear, distinctive roles and a common goal: better neural combinatorial solvers. Stay tuned!
+
+---
 CORectifier gives policy-gradient solvers useful action-level supervision without breaking feasibility. During training, a hierarchical **batch → trajectory → segment** gate selectively replaces a policy action with the feasible successor from an expert tour, then continues the rollout from the executed state. The policy is optimized with the resulting rollout reward and likelihoods; at inference time, the model is used normally with no expert data or rectifier.
 
 ![CORectifier overview](assets/fig1.png)
@@ -172,11 +175,9 @@ Appendix defaults are `label_prob=instance_prob=0.1` for TSP/PCTSP/CVRP/KP and `
 
 The reference tour is used only while training. The executed action is rescored by the policy, preserving the original RL objective and feasibility checks.
 
-## 📚 Acknowledgements
+## 📚 Acknowledgements & Citation
 
 The implementations partly build on [POMO](https://github.com/yd-kwon/POMO), [MatNet](https://github.com/yd-kwon/MatNet), [AM](https://github.com/wouterkool/attention-learn-to-route), [UniCO](https://github.com/Thinklab-SJTU/UniCO), [ML4CO-Bench-101](https://github.com/Thinklab-SJTU/ML4CO-Bench-101), and [ML4CO-Kit](https://github.com/Thinklab-SJTU/ML4CO-Kit).
-
-## ✍🏻 Citation
 
 If you find CORectifier valuable for your research or applied projects:
 
@@ -190,4 +191,4 @@ year={2026}
 }
 ```
 
-Note: Please use the BibTeX entry exported from OpenReview after the camera-ready version is publicly available as the authoritative citation.
+Note: Please use the BibTeX entry exported from [OpenReview](https://openreview.net/forum?id=bpt10w03zk) after the camera-ready version is publicly available as the authoritative citation.
