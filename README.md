@@ -178,7 +178,7 @@ The implementations partly build on [POMO](https://github.com/yd-kwon/POMO), [Ma
 
 ## ✍🏻 Citation
 
-If you find COExpander valuable for your research or applied projects:
+If you find CORectifier valuable for your research or applied projects:
 
 ```
 @inproceedings{
