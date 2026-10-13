@@ -177,6 +177,9 @@ The reference tour is used only while training. The executed action is rescored 
 The implementations partly build on [POMO](https://github.com/yd-kwon/POMO), [MatNet](https://github.com/yd-kwon/MatNet), [AM](https://github.com/wouterkool/attention-learn-to-route), [UniCO](https://github.com/Thinklab-SJTU/UniCO), [ML4CO-Bench-101](https://github.com/Thinklab-SJTU/ML4CO-Bench-101), and [ML4CO-Kit](https://github.com/Thinklab-SJTU/ML4CO-Kit).
 
 ## ✍🏻 Citation
+
+If you find COExpander valuable for your research or applied projects:
+
 ```
 @inproceedings{
 CORectifier,
@@ -186,4 +189,5 @@ booktitle={The Fortieth Annual Conference on Neural Information Processing Syste
 year={2026}
 }
 ```
-Please use the BibTeX entry exported from OpenReview after the camera-ready version is publicly available as the authoritative citation.
+
+Note: Please use the BibTeX entry exported from OpenReview after the camera-ready version is publicly available as the authoritative citation.
