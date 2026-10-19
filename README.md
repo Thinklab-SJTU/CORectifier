@@ -1,6 +1,6 @@
 # ✨ CORectifier
 
-This is the official implementation of our NeurIPS 2026 paper "[**Hierarchically Rectifying Policy Rollouts for Reinforcement Learning in Combinatorial Solvers**](https://openreview.net/forum?id=bpt10w03zk)".
+This is the official implementation of our NeurIPS 2026 paper "[**CORectifier: Hierarchically Rectifying Policy Rollouts for Reinforcement Learning in Combinatorial Solvers**](https://openreview.net/forum?id=bpt10w03zk)".
 
 **Authors**: [**Wenzheng Pan**](https://wzever.github.io/) · [**Nuoyan Chen**](https://cny123222.github.io/about/) · [**Jiaxi Liu**](https://ecthelionliu.github.io) · [**Jiale Ma**](https://heatingma.github.io/) · [**Junchi Yan**](https://thinklab.sjtu.edu.cn) | [![NeurIPS 2026](https://img.shields.io/badge/NeurIPS-2026-b31b1b.svg)](paper_preview.pdf) [[paper preview*](paper_preview.pdf)]
 
